@@ -1,0 +1,4 @@
+livekit-venv/
+__pycache__
+
+.env
