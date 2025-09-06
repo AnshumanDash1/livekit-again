@@ -1,11 +1,15 @@
+import os
+
 from dotenv import load_dotenv
 
 from livekit import agents
 from livekit.agents import AgentSession, Agent, RoomInputOptions
-from livekit.plugins import noise_cancellation
+from livekit.plugins import noise_cancellation, openai
 from livekit.plugins import google
-from livekit.agents import mcp
 from prompts import AGENT_INSTRUCTION, SESSION_INSTRUCTION
+from tools import get_weather, search_web, browser_use
+# from mcp_client import MCPServerSse
+# from mcp_client.agent_tools import MCPToolsIntegration
 
 load_dotenv(".env")
 # to start, do uv run agent.py console
@@ -13,21 +17,30 @@ load_dotenv(".env")
 
 class Assistant(Agent):
     def __init__(self) -> None:
-        super().__init__(instructions=AGENT_INSTRUCTION)
+        super().__init__(
+            instructions=AGENT_INSTRUCTION,
+            tools = [
+                get_weather,
+                browser_use
+            ]
+        )
 
 
 async def entrypoint(ctx: agents.JobContext):
     session = AgentSession(
         llm=google.beta.realtime.RealtimeModel(
-            voice="Charon"
-        ),
-        # mcp_servers=[
-        #     mcp.MCPServerStdio(
-        #         command="npx",
-        #         args=["@playwright/mcp@latest", "--port", "8931"]
-        #     )
-        # ]
+            voice="charon"
+        )
     )
+    # mcp_server = MCPServerSse(
+    #     params={"url": os.environ.get("PLAYWRIGHT_MCP_URL")},
+    #     cache_tools_list=True,
+    #     name="SSE MCP Server"
+    # )
+    # agent = await MCPToolsIntegration.create_agent_with_tools(
+    #     agent_class=Assistant,
+    #     mcp_servers=[mcp_server]
+    # )
 
     await session.start(
         room=ctx.room,
