@@ -2,6 +2,28 @@
 
 This file contains important information for AI agents working in this repository.
 
+## Before doing anything
+
+Always make sure you are in the ai-branch in git. Check which branch you are on, and make sure it is the ai-branch. If not, change to the ai-branch. If you are unable to, then do nothing else until this issue is resolved.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## Build/Lint/Test Commands
 
 - **Install dependencies**: `pip install -r requirements.txt`
