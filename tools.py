@@ -4,6 +4,7 @@ import requests
 from langchain_community.tools import DuckDuckGoSearchRun
 from browser_use import Agent, ChatGoogle, Browser
 from dotenv import load_dotenv
+import asyncio
 
 
 @function_tool()
@@ -61,4 +62,4 @@ async def browser_use(
         llm=llm,
         browser=browser
     )
-    await agent.run()
+    asyncio.create_task(agent.run())
