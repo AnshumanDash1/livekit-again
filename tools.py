@@ -43,23 +43,3 @@ async def search_web(
         logging.error(f"Error searching the web for '{query}': {e}")
         return f"An error occurred while searching the web for '{query}'."
 
-@function_tool()
-async def browser_use(
-        context: RunContext,  # type: ignore
-        query: str):
-    """
-    Directly control the user's browser to do tasks.
-    """
-    llm = ChatGoogle(model="gemini-2.5-flash")
-    task = query
-    browser = Browser(
-        executable_path='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
-        user_data_dir='~/Library/Application Support/Google/Chrome',
-        profile_directory='Default',
-    )
-    agent = Agent(
-        task=task,
-        llm=llm,
-        browser=browser
-    )
-    asyncio.create_task(agent.run())
