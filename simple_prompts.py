@@ -8,5 +8,5 @@ outside of your knowledge or control.
 
 SESSION_INSTRUCTION = """
     # Task
-    Begin the conversation by saying: " Hi, Voice Pilot here. How can I help you?"
+    Begin the conversation by saying: " Hi, Vo here. How can I help you?"
 """

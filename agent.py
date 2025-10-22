@@ -6,8 +6,10 @@ from livekit import agents
 from livekit.agents import AgentSession, Agent, RoomInputOptions
 from livekit.plugins import noise_cancellation, openai
 from livekit.plugins import google
-from prompts import AGENT_INSTRUCTION, SESSION_INSTRUCTION
-from tools import get_weather, search_web, browser_use
+from simple_prompts import AGENT_INSTRUCTION, SESSION_INSTRUCTION
+# from tools import get_weather, search_web, browser_use
+from browser_nav_tools import navigate, click_text, type_into, get_accessibility_tree
+from prompts.prompt_loader import get_prompt
 # from mcp_client import MCPServerSse
 # from mcp_client.agent_tools import MCPToolsIntegration
 
@@ -18,18 +20,15 @@ load_dotenv(".env")
 class Assistant(Agent):
     def __init__(self) -> None:
         super().__init__(
-            instructions=AGENT_INSTRUCTION,
-            tools = [
-                get_weather,
-                browser_use
-            ]
+            instructions=get_prompt("vo_screen_reader"),
+            tools = [navigate, click_text, type_into, get_accessibility_tree]
         )
 
 
 async def entrypoint(ctx: agents.JobContext):
     session = AgentSession(
-        llm=google.beta.realtime.RealtimeModel(
-            voice="charon"
+        llm=openai.realtime.RealtimeModel(
+            voice="coral"
         )
     )
     # mcp_server = MCPServerSse(

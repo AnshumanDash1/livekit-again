@@ -1,6 +1,7 @@
 import asyncio
 from contextlib import asynccontextmanager
 from playwright.async_api import async_playwright, Playwright
+from livekit.agents import function_tool
 
 CDP_URL = "http://localhost:9222"
 
@@ -45,7 +46,7 @@ async def click_text(text: str):
         Confirmation of the element you clicked on, if successful.
     """
     async with get_playwright_context() as (_, _, _, page):
-        await page.get_by_text(text).click()
+        await page.get_by_text(text).click(timeout=5000)
         return f"Clicked '{text}'"
 
 @function_tool()
