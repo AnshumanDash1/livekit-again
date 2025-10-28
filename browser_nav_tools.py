@@ -9,12 +9,21 @@ CDP_URL = "http://localhost:9222"
 async def get_playwright_context():
     async with async_playwright() as p:
         browser = await p.chromium.connect_over_cdp(CDP_URL)
-        context = browser.contexts[0]
-        page = context.pages[0]
+        if not browser.contexts:
+            context = await browser.new_context()
+        else:
+            context = browser.contexts[0]
+
+        if not context.pages:
+            page = await context.new_page()
+        else:
+            page = context.pages[0]
+
         try:
             yield p, browser, context, page
         finally:
             await p.stop()
+
 
 @function_tool()
 async def navigate(url: str):
@@ -46,7 +55,7 @@ async def click_text(text: str):
         Confirmation of the element you clicked on, if successful.
     """
     async with get_playwright_context() as (_, _, _, page):
-        await page.get_by_text(text).click(timeout=5000)
+        await page.get_by_text(text).click()
         return f"Clicked '{text}'"
 
 @function_tool()

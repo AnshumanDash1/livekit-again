@@ -13,9 +13,8 @@ from prompts.prompt_loader import get_prompt
 # from mcp_client import MCPServerSse
 # from mcp_client.agent_tools import MCPToolsIntegration
 
+# to start: uv run agent.py console
 load_dotenv(".env")
-# to start, do uv run agent.py console
-
 
 class Assistant(Agent):
     def __init__(self) -> None:
@@ -31,21 +30,11 @@ async def entrypoint(ctx: agents.JobContext):
             voice="coral"
         )
     )
-    # mcp_server = MCPServerSse(
-    #     params={"url": os.environ.get("PLAYWRIGHT_MCP_URL")},
-    #     cache_tools_list=True,
-    #     name="SSE MCP Server"
-    # )
-    # agent = await MCPToolsIntegration.create_agent_with_tools(
-    #     agent_class=Assistant,
-    #     mcp_servers=[mcp_server]
-    # )
 
     await session.start(
         room=ctx.room,
         agent=Assistant(),
         room_input_options=RoomInputOptions(
-            # For telephony applications, use `BVCTelephony` instead for best results
             noise_cancellation=noise_cancellation.BVC(),
         ),
     )
